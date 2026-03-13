@@ -1,0 +1,19 @@
+<Application x:Class="FlowChartEditor.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- 节点样式 -->
+                <ResourceDictionary Source="Resources/NodeStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            
+            <!-- 全局转换器 -->
+            <converters:NodeTypeToShapeConverter x:Key="NodeTypeToShapeConverter" 
+                xmlns:converters="clr-namespace:FlowChartEditor.Converters"/>
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+            <converters:ConditionToVisibilityConverter x:Key="ConditionToVisibilityConverter"/>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
