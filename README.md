@@ -1,6 +1,10 @@
-# Flow-Wpf
+# Flow-Wpf v2.0
 
-基于 WPF 的可视化流程图编辑器，支持 Nodify 节点编辑引擎。
+基于 WPF 的可视化流程图编辑器 - **Nodify 版本**
+
+> 🎉 **v2.0 Released!** Now with Nodify engine, execution support, and modern UI themes!
+
+⚠️ **Deprecation Notice**: The original Canvas-based version is deprecated. See [DEPRECATION.md](DEPRECATION.md) for migration details.
 
 ## 📦 项目结构
 
