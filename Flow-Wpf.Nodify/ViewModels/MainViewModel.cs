@@ -70,6 +70,15 @@ namespace Flow_Wpf.Nodify.ViewModels
         public ICommand SaveCommand { get; }
         public ICommand OpenCommand { get; }
         public ICommand NewCommand { get; }
+        public ICommand ExecuteCommand { get; }
+        public ICommand PauseCommand { get; }
+        public ICommand StopCommand { get; }
+        public ICommand ZoomInCommand { get; }
+        public ICommand ZoomOutCommand { get; }
+        public ICommand ResetZoomCommand { get; }
+
+        private FlowExecutor? _executor;
+        private double _zoom = 1.0;
 
         public MainViewModel()
         {
@@ -80,6 +89,17 @@ namespace Flow_Wpf.Nodify.ViewModels
             SaveCommand = new RelayCommand(async () => await SaveFlow());
             OpenCommand = new RelayCommand(async () => await OpenFlow());
             NewCommand = new RelayCommand(NewFlow);
+            ExecuteCommand = new RelayCommand(ExecuteFlow);
+            PauseCommand = new RelayCommand(PauseFlow);
+            StopCommand = new RelayCommand(StopFlow);
+            ZoomInCommand = new RelayCommand(ZoomIn);
+            ZoomOutCommand = new RelayCommand(ZoomOut);
+            ResetZoomCommand = new RelayCommand(ResetZoom);
+
+            // Initialize executor
+            _executor = new FlowExecutor(this);
+            _executor.NodeExecuted += OnNodeExecuted;
+            _executor.FlowCompleted += OnFlowCompleted;
 
             // Initialize with sample nodes
             InitializeSampleNodes();
@@ -230,6 +250,56 @@ namespace Flow_Wpf.Nodify.ViewModels
             Nodes.Clear();
             Connections.Clear();
             _currentFilePath = null;
+        }
+
+        private void ExecuteFlow()
+        {
+            _executor?.Execute();
+        }
+
+        private void PauseFlow()
+        {
+            _executor?.Pause();
+        }
+
+        private void StopFlow()
+        {
+            _executor?.Stop();
+        }
+
+        private void ZoomIn()
+        {
+            _zoom = Math.Min(_zoom + 0.25, 5.0);
+            OnPropertyChanged(nameof(Zoom));
+        }
+
+        private void ZoomOut()
+        {
+            _zoom = Math.Max(_zoom - 0.25, 0.1);
+            OnPropertyChanged(nameof(Zoom));
+        }
+
+        private void ResetZoom()
+        {
+            _zoom = 1.0;
+            OnPropertyChanged(nameof(Zoom));
+        }
+
+        public double Zoom
+        {
+            get => _zoom;
+            set => SetProperty(ref _zoom, value);
+        }
+
+        private void OnNodeExecuted(object? sender, NodeExecutedEventArgs e)
+        {
+            // Highlight executed node
+            System.Diagnostics.Debug.WriteLine($"Executed: {e.Node?.Title}");
+        }
+
+        private void OnFlowCompleted(object? sender, FlowCompletedEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("Flow completed!");
         }
     }
 

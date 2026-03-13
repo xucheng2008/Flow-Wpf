@@ -7,9 +7,47 @@
         xmlns:nodify="clr-namespace:Nodify;assembly=Nodify"
         xmlns:vm="clr-namespace:Flow_Wpf.Nodify.ViewModels"
         mc:Ignorable="d"
-        Title="Flow-Wpf Nodify Editor" Height="800" Width="1200">
+        Title="Flow-Wpf Nodify Editor" Height="800" Width="1200"
+        Background="{DynamicResource BackgroundBrush}">
+    
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Themes/DarkTheme.xaml"/>
+                <ResourceDictionary Source="Views/NodeTemplates.xaml"/>
+                <ResourceDictionary Source="Views/ConnectionStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Toolbar -->
+        <ToolBar Grid.Row="0" Style="{StaticResource MainToolbar}">
+            <Button Content="📄 New" Command="{Binding NewCommand}" Style="{StaticResource ToolbarButton}"/>
+            <Button Content="📂 Open" Command="{Binding OpenCommand}" Style="{StaticResource ToolbarButton}"/>
+            <Button Content="💾 Save" Command="{Binding SaveCommand}" Style="{StaticResource ToolbarButton}"/>
+            <Separator/>
+            <Button Content="➕ Add Node" Command="{Binding AddNodeCommand}" Style="{StaticResource ToolbarButton}"/>
+            <Button Content="🗑️ Delete" Command="{Binding DeleteNodeCommand}" Style="{StaticResource ToolbarButton}"/>
+            <Separator/>
+            <Button Content="▶️ Execute" Command="{Binding ExecuteCommand}" Style="{StaticResource ToolbarButton}"/>
+            <Button Content="⏸️ Pause" Command="{Binding PauseCommand}" Style="{StaticResource ToolbarButton}"/>
+            <Button Content="⏹️ Stop" Command="{Binding StopCommand}" Style="{StaticResource ToolbarButton}"/>
+            <Separator/>
+            <Button Content="🔍 Zoom In" Command="{Binding ZoomInCommand}" Style="{StaticResource ToolbarButton}"/>
+            <Button Content="🔎 Zoom Out" Command="{Binding ZoomOutCommand}" Style="{StaticResource ToolbarButton}"/>
+            <Button Content="🔄 Reset" Command="{Binding ResetZoomCommand}" Style="{StaticResource ToolbarButton}"/>
+        </ToolBar>
+
+        <!-- Editor Area -->
         <nodify:NodifyEditor x:Name="Editor"
+                              Grid.Row="1"
                               ItemsSource="{Binding Nodes}"
                               ConnectionsSource="{Binding Connections}"
                               PanGesture="Ctrl+Space"
@@ -19,20 +57,9 @@
                               SnappingEnabled="True"
                               GridSize="20"
                               MinZoom="0.1"
-                              MaxZoom="5.0">
+                              MaxZoom="5.0"
+                              Background="{StaticResource DarkGridBackground}">
             
-            <!-- Grid Background -->
-            <nodify:NodifyEditor.Background>
-                <VisualBrush TileMode="Tile" Viewport="0,0,20,20" ViewportUnits="Absolute">
-                    <VisualBrush.Visual>
-                        <Grid Background="Transparent">
-                            <Ellipse Width="1" Height="1" Fill="#CCCCCC" Margin="9,9,0,0"/>
-                        </Grid>
-                    </VisualBrush.Visual>
-                </VisualBrush>
-            </nodify:NodifyEditor.Background>
-            
-            <!-- Node Template -->
             <nodify:NodifyEditor.ItemTemplate>
                 <DataTemplate DataType="{x:Type vm:NodeViewModel}">
                     <ContentControl Content="{Binding}"
@@ -40,7 +67,6 @@
                 </DataTemplate>
             </nodify:NodifyEditor.ItemTemplate>
             
-            <!-- Connection Template -->
             <nodify:NodifyEditor.ConnectionTemplate>
                 <DataTemplate>
                     <nodify:Connection Style="{StaticResource CircuitConnection}"/>
@@ -48,5 +74,20 @@
             </nodify:NodifyEditor.ConnectionTemplate>
             
         </nodify:NodifyEditor>
+
+        <!-- Status Bar -->
+        <StatusBar Grid.Row="2" Background="{StaticResource PanelBrush}">
+            <StatusBarItem>
+                <TextBlock Text="{Binding Nodes.Count, StringFormat='Nodes: {0}'}"/>
+            </StatusBarItem>
+            <Separator/>
+            <StatusBarItem>
+                <TextBlock Text="{Binding Connections.Count, StringFormat='Connections: {0}'}"/>
+            </StatusBarItem>
+            <Separator/>
+            <StatusBarItem>
+                <TextBlock x:Name="ZoomText" Text="100%"/>
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </Window>
