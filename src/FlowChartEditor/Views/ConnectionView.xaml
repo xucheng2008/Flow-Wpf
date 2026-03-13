@@ -1,0 +1,35 @@
+<UserControl x:Class="FlowChartEditor.Views.ConnectionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:FlowChartEditor.Controls">
+    
+    <Canvas>
+        <!-- 连接线 -->
+        <Path x:Name="ConnectionPath"
+              Stroke="#4FB3D6"
+              StrokeThickness="2"
+              Fill="None"
+              StrokeLineJoin="Round"
+              StrokeStartLineCap="Round"
+              StrokeEndLineCap="Round"/>
+        
+        <!-- 箭头 -->
+        <controls:ArrowHead x:Name="ArrowHeadElement"
+                            Fill="#4FB3D6"
+                            Width="10"
+                            Height="10"/>
+        
+        <!-- 连接标签 -->
+        <Border x:Name="LabelBorder"
+                Background="White"
+                Padding="3,1"
+                CornerRadius="2"
+                Visibility="Collapsed">
+            <TextBlock x:Name="LabelText"
+                       Text=""
+                       FontSize="10"
+                       FontFamily="Arial"
+                       Foreground="#666666"/>
+        </Border>
+    </Canvas>
+</UserControl>
