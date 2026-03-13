@@ -1,0 +1,64 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:nodify="clr-namespace:Nodify;assembly=Nodify">
+
+    <!-- Circuit Connection Style - Right-angle connections for flowcharts -->
+    <Style x:Key="CircuitConnection" TargetType="nodify:Connection">
+        <Setter Property="Stroke" Value="#00AA00"/>
+        <Setter Property="StrokeThickness" Value="2"/>
+        <Setter Property="ArrowSize" Value="8"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="nodify:Connection">
+                    <Canvas>
+                        <Path x:Name="PART_Path"
+                              Stroke="{TemplateBinding Stroke}"
+                              StrokeThickness="{TemplateBinding StrokeThickness}"
+                              Data="{TemplateBinding PathGeometry}"
+                              Fill="Transparent"/>
+
+                        <Path x:Name="PART_Arrow"
+                              Fill="{TemplateBinding Stroke}"
+                              Data="{TemplateBinding ArrowGeometry}"/>
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Connection Label Style - For yes/no labels on decision branches -->
+    <Style x:Key="ConnectionLabelStyle" TargetType="ContentControl">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ContentControl">
+                    <Border Background="White"
+                            BorderBrush="#CCCCCC"
+                            BorderThickness="1"
+                            Padding="6,3"
+                            CornerRadius="3">
+                        <ContentPresenter Content="{TemplateBinding Content}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Standard Straight Connection -->
+    <Style x:Key="StandardConnection" TargetType="nodify:Connection" BasedOn="{StaticResource CircuitConnection}">
+        <Setter Property="Stroke" Value="#00AA00"/>
+        <Setter Property="StrokeThickness" Value="2"/>
+    </Style>
+
+    <!-- Bezier Curved Connection -->
+    <Style x:Key="BezierConnection" TargetType="nodify:Connection" BasedOn="{StaticResource CircuitConnection}">
+        <Setter Property="Stroke" Value="#007ACC"/>
+        <Setter Property="StrokeThickness" Value="2"/>
+    </Style>
+
+    <!-- Step Connection - 90 degree angles -->
+    <Style x:Key="StepConnection" TargetType="nodify:Connection" BasedOn="{StaticResource CircuitConnection}">
+        <Setter Property="Stroke" Value="#00AA00"/>
+        <Setter Property="StrokeThickness" Value="2"/>
+    </Style>
+
+</ResourceDictionary>
