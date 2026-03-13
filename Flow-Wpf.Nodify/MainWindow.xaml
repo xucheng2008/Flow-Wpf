@@ -5,15 +5,48 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Flow_Wpf.Nodify"
         xmlns:nodify="clr-namespace:Nodify;assembly=Nodify"
+        xmlns:vm="clr-namespace:Flow_Wpf.Nodify.ViewModels"
         mc:Ignorable="d"
         Title="Flow-Wpf Nodify Editor" Height="800" Width="1200">
     <Grid>
         <nodify:NodifyEditor x:Name="Editor"
+                              ItemsSource="{Binding Nodes}"
+                              ConnectionsSource="{Binding Connections}"
                               PanGesture="Ctrl+Space"
                               ZoomGesture="Ctrl+Wheel"
                               SelectGesture="LeftClick"
                               MoveGesture="RightClick"
                               SnappingEnabled="True"
-                              GridSize="20"/>
+                              GridSize="20"
+                              MinZoom="0.1"
+                              MaxZoom="5.0">
+            
+            <!-- Grid Background -->
+            <nodify:NodifyEditor.Background>
+                <VisualBrush TileMode="Tile" Viewport="0,0,20,20" ViewportUnits="Absolute">
+                    <VisualBrush.Visual>
+                        <Grid Background="Transparent">
+                            <Ellipse Width="1" Height="1" Fill="#CCCCCC" Margin="9,9,0,0"/>
+                        </Grid>
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </nodify:NodifyEditor.Background>
+            
+            <!-- Node Template -->
+            <nodify:NodifyEditor.ItemTemplate>
+                <DataTemplate DataType="{x:Type vm:NodeViewModel}">
+                    <ContentControl Content="{Binding}"
+                                    ContentTemplate="{Binding Type, Converter={StaticResource NodeTypeToTemplateConverter}}"/>
+                </DataTemplate>
+            </nodify:NodifyEditor.ItemTemplate>
+            
+            <!-- Connection Template -->
+            <nodify:NodifyEditor.ConnectionTemplate>
+                <DataTemplate>
+                    <nodify:Connection Style="{StaticResource CircuitConnection}"/>
+                </DataTemplate>
+            </nodify:NodifyEditor.ConnectionTemplate>
+            
+        </nodify:NodifyEditor>
     </Grid>
 </Window>
