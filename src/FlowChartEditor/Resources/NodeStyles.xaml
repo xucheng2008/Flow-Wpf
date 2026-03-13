@@ -1,0 +1,104 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:converters="clr-namespace:FlowChartEditor.Converters">
+    
+    <!-- 转换器资源 -->
+    <converters:NodeTypeToShapeConverter x:Key="NodeTypeToShapeConverter"/>
+    <converters:ConditionToVisibilityConverter x:Key="ConditionToVisibilityConverter"/>
+    <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    
+    <!-- 基础节点样式 -->
+    <Style x:Key="BaseNodeStyle" TargetType="ContentControl">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="BorderBrush" Value="#4FB3D6"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontFamily" Value="Arial"/>
+        <Setter Property="Foreground" Value="#333333"/>
+        <Setter Property="MinWidth" Value="100"/>
+        <Setter Property="MinHeight" Value="50"/>
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ContentControl">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="4"
+                            Padding="10">
+                        <ContentPresenter HorizontalAlignment="Center" 
+                                          VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="#2E8B57"/>
+                <Setter Property="Effect">
+                    <Setter.Value>
+                        <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.3"/>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- 矩形节点样式（处理步骤） -->
+    <Style x:Key="RectangleNodeStyle" TargetType="ContentControl" BasedOn="{StaticResource BaseNodeStyle}">
+        <Setter Property="Background" Value="#E3F2FD"/>
+        <Setter Property="BorderBrush" Value="#4FB3D6"/>
+    </Style>
+    
+    <!-- 菱形节点样式（判断条件） -->
+    <Style x:Key="DiamondNodeStyle" TargetType="ContentControl" BasedOn="{StaticResource BaseNodeStyle}">
+        <Setter Property="Background" Value="#FFF9C4"/>
+        <Setter Property="BorderBrush" Value="#FBC02D"/>
+    </Style>
+    
+    <!-- 圆形节点样式（开始/结束） -->
+    <Style x:Key="CircleNodeStyle" TargetType="ContentControl" BasedOn="{StaticResource BaseNodeStyle}">
+        <Setter Property="Background" Value="#C8E6C9"/>
+        <Setter Property="BorderBrush" Value="#388E3C"/>
+        <Setter Property="Foreground" Value="#1B5E20"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+    </Style>
+    
+    <!-- 圆角矩形节点样式（输入/输出） -->
+    <Style x:Key="RoundedRectangleNodeStyle" TargetType="ContentControl" BasedOn="{StaticResource BaseNodeStyle}">
+        <Setter Property="Background" Value="#FFCCBC"/>
+        <Setter Property="BorderBrush" Value="#D84315"/>
+    </Style>
+    
+    <!-- 选中状态样式 -->
+    <Style x:Key="SelectedNodeStyle" TargetType="ContentControl">
+        <Setter Property="BorderBrush" Value="#FF4081"/>
+        <Setter Property="BorderThickness" Value="3"/>
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect BlurRadius="15" ShadowDepth="3" Opacity="0.5" Color="#FF4081"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- 连接线样式 -->
+    <Style x:Key="ConnectionLineStyle" TargetType="Path">
+        <Setter Property="Stroke" Value="#4FB3D6"/>
+        <Setter Property="StrokeThickness" Value="2"/>
+        <Setter Property="Fill" Value="None"/>
+        <Setter Property="StrokeLineJoin" Value="Round"/>
+        <Setter Property="StrokeStartLineCap" Value="Round"/>
+        <Setter Property="StrokeEndLineCap" Value="Round"/>
+    </Style>
+    
+    <!-- 连接线上的文本标签样式 -->
+    <Style x:Key="ConnectionLabelStyle" TargetType="TextBlock">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="Foreground" Value="#666666"/>
+        <Setter Property="FontSize" Value="10"/>
+        <Setter Property="Padding" Value="3,1"/>
+        <Setter Property="FontFamily" Value="Arial"/>
+    </Style>
+    
+</ResourceDictionary>
