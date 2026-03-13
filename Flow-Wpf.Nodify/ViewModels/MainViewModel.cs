@@ -2,6 +2,8 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using Flow_Wpf.Nodify.Services;
+using Microsoft.Win32;
 
 namespace Flow_Wpf.Nodify.ViewModels
 {
@@ -65,6 +67,9 @@ namespace Flow_Wpf.Nodify.ViewModels
         public ICommand DeleteNodeCommand { get; }
         public ICommand DeleteConnectionCommand { get; }
         public ICommand AddConnectionCommand { get; }
+        public ICommand SaveCommand { get; }
+        public ICommand OpenCommand { get; }
+        public ICommand NewCommand { get; }
 
         public MainViewModel()
         {
@@ -72,6 +77,9 @@ namespace Flow_Wpf.Nodify.ViewModels
             DeleteNodeCommand = new RelayCommand(DeleteSelectedNode, () => SelectedNode != null);
             DeleteConnectionCommand = new RelayCommand(DeleteSelectedConnection, () => SelectedConnection != null);
             AddConnectionCommand = new RelayCommand<ConnectionViewModel>(AddConnection);
+            SaveCommand = new RelayCommand(async () => await SaveFlow());
+            OpenCommand = new RelayCommand(async () => await OpenFlow());
+            NewCommand = new RelayCommand(NewFlow);
 
             // Initialize with sample nodes
             InitializeSampleNodes();
@@ -155,6 +163,73 @@ namespace Flow_Wpf.Nodify.ViewModels
             {
                 Connections.Add(connection);
             }
+        }
+
+        private string? _currentFilePath;
+
+        private async Task SaveFlow()
+        {
+            try
+            {
+                var dialog = new SaveFileDialog
+                {
+                    Filter = "Flow Files (*.flow)|*.flow|JSON Files (*.json)|*.json|All Files (*.*)|*.*",
+                    Title = "Save Flow Chart",
+                    FileName = "MyFlow"
+                };
+
+                if (dialog.ShowDialog() == true)
+                {
+                    await FlowSerializer.SaveViewModelAsync(this, dialog.FileName);
+                    _currentFilePath = dialog.FileName;
+                    // Could add status notification here
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle error - could show message box
+                System.Diagnostics.Debug.WriteLine($"Save error: {ex.Message}");
+            }
+        }
+
+        private async Task OpenFlow()
+        {
+            try
+            {
+                var dialog = new OpenFileDialog
+                {
+                    Filter = "Flow Files (*.flow)|*.flow|JSON Files (*.json)|*.json|All Files (*.*)|*.*",
+                    Title = "Open Flow Chart"
+                };
+
+                if (dialog.ShowDialog() == true)
+                {
+                    var newViewModel = await FlowSerializer.LoadViewModelAsync(dialog.FileName);
+                    
+                    // Copy loaded data
+                    Nodes.Clear();
+                    Connections.Clear();
+                    
+                    foreach (var node in newViewModel.Nodes)
+                        Nodes.Add(node);
+                    
+                    foreach (var conn in newViewModel.Connections)
+                        Connections.Add(conn);
+                    
+                    _currentFilePath = dialog.FileName;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Open error: {ex.Message}");
+            }
+        }
+
+        private void NewFlow()
+        {
+            Nodes.Clear();
+            Connections.Clear();
+            _currentFilePath = null;
         }
     }
 
